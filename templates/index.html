@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#080b16">
+  <title>Laura IA</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <link rel="stylesheet" href="/static/vision.css">
+  <link rel="stylesheet" href="/static/game.css">
+</head>
+<body>
+  <div class="ambient"></div>
+  <main class="app-shell">
+    <aside class="sidebar">
+      <div class="brand"><span class="orb small"></span><div><strong>LAURA</strong><small>IA LOCAL • OFFLINE</small></div></div>
+      <nav>
+        <button class="nav active" data-panel="chat">◈ <span>Conversa</span></button>
+        <button class="nav" data-panel="memories">◇ <span>Memórias</span></button>
+        <button class="nav" data-panel="profile">◎ <span>Relacionamento</span></button>
+        <button class="nav" data-panel="history">◷ <span>Histórico</span></button>
+        <button class="nav" data-panel="learning">⌁ <span>Aprendizado</span></button>
+        <button class="nav" data-panel="vision">◉ <span>Imagens</span></button>
+        <button class="nav" data-panel="game">▦ <span>Jogos</span></button>
+      </nav>
+      <div class="local-badge"><i></i> Processamento local</div>
+    </aside>
+
+    <section class="workspace">
+      <header><div><h1 id="panel-title">Conversa</h1><p id="panel-subtitle">Laura está pronta para conversar</p></div><span class="user-chip">{{ user }}</span></header>
+
+      <section id="chat" class="panel active chat-panel">
+        <div id="messages" class="messages">
+          <div class="message laura"><span class="orb"></span><div><small>Laura</small><p>Oi, Nicolas! O que vamos aprender hoje?</p></div></div>
+        </div>
+        <form id="chat-form" class="composer">
+          <textarea id="message-input" rows="1" maxlength="1000" placeholder="Converse com a Laura..." autofocus></textarea>
+          <button type="submit" aria-label="Enviar">➤</button>
+        </form>
+      </section>
+
+      <section id="memories" class="panel content-panel">
+        <div class="section-heading"><div><h2>Memórias aprendidas</h2><p>Informações que a Laura guardou sobre você.</p></div><button class="secondary" id="refresh-memories">Atualizar</button></div>
+        <input id="memory-search" class="composer" style="margin:0 0 18px;width:100%;color:white" placeholder="Pesquisar nas memórias...">
+        <div id="memory-list" class="card-grid"></div>
+        <div class="section-heading" style="margin-top:34px"><div><h2>Respostas ensinadas</h2><p>Perguntas que você ensinou a Laura a responder.</p></div></div>
+        <div id="answer-list" class="card-grid"></div>
+      </section>
+
+      <section id="profile" class="panel content-panel">
+        <div class="profile-card">
+          <span class="orb large"></span><h2>Laura + Nicolas</h2><p id="relationship">Carregando relacionamento...</p>
+          <label>Confiança <span id="trust-value">0%</span></label><div class="meter"><i id="trust-meter"></i></div>
+          <label>Paciência <span id="patience-value">0%</span></label><div class="meter purple"><i id="patience-meter"></i></div>
+          <small>A proximidade aumenta naturalmente durante conversas respeitosas.</small>
+        </div>
+      </section>
+
+      <section id="history" class="panel content-panel">
+        <div class="section-heading"><div><h2>Histórico local</h2><p>As conversas ficam somente neste aparelho.</p></div><button class="danger" id="clear-history">Limpar</button></div>
+        <div id="history-list" class="history-list"></div>
+      </section>
+      <section id="learning" class="panel content-panel">
+        <div class="section-heading"><div><h2>Cérebro treinável</h2><p>Exemplos incorporados através do seu feedback.</p></div><span class="user-chip" id="example-count">0 exemplos</span></div>
+        <div class="profile-card" style="margin:0 0 24px;text-align:left"><h2>Como ensinar</h2><p style="margin:8px 0 0;color:var(--muted)">Use 👍 quando a intenção estiver correta. Use 👎 para informar a categoria certa. O modelo é treinado novamente na mesma hora.</p></div>
+        <div id="training-list" class="history-list"></div>
+        <div class="section-heading" style="margin-top:30px"><div><h2>Backup e diagnóstico</h2><p>Exporte ou restaure todos os dados da Laura.</p></div></div>
+        <div class="viz-row"><button class="secondary" id="export-backup">Exportar backup</button><button class="secondary" id="export-previous-backup">Baixar cópia anterior</button><label class="secondary">Importar backup<input id="import-backup" type="file" accept="application/json" hidden></label></div>
+        <div id="diagnostics" class="profile-card" style="margin:18px 0 0;text-align:left"></div>
+      </section>
+
+      <section id="vision" class="panel content-panel">
+        <div class="section-heading"><div><h2>Visão da Laura</h2><p>Aprendizado visual inteiramente local e offline.</p></div><span class="user-chip" id="visual-count">0 imagens</span></div>
+        <div class="vision-grid">
+          <article class="vision-card">
+            <h2>Analisar ou ensinar</h2>
+            <p>Escolha uma foto, use a câmera ou arraste uma imagem para esta área.</p>
+            <div id="image-drop" class="image-drop" tabindex="0">
+              <img id="image-preview" alt="Prévia da imagem" hidden>
+              <div id="drop-hint"><b>＋</b><span>Selecionar ou arrastar imagem</span><small>PNG, JPG, WEBP, BMP ou GIF • até 20 MB • 64 megapixels</small></div>
+            </div>
+            <div class="viz-row">
+              <label class="secondary">Galeria/arquivo<input id="image-file" type="file" accept="image/*" hidden></label>
+              <label class="secondary">Abrir câmera<input id="image-camera" type="file" accept="image/*" capture="environment" hidden></label>
+              <label class="secondary">Ensinar várias<input id="image-batch" type="file" accept="image/*" multiple hidden></label>
+              <button class="secondary" id="analyze-image" disabled>Analisar</button>
+            </div>
+            <div class="teach-row"><input id="image-label" maxlength="60" placeholder="Categoria, por exemplo: garrafa"><button id="teach-image" disabled>Ensinar</button></div>
+            <small class="batch-hint">Para “Ensinar várias”, escreva primeiro a categoria e selecione até 100 fotos.</small>
+            <div class="package-import">
+              <div><b>Pacote de imagens</b><small>ZIP organizado em pastas: cada pasta vira uma categoria. Até 100 MB e 1.000 fotos por pacote.</small></div>
+              <select id="package-limit" aria-label="Limite por categoria"><option value="20">20 por categoria</option><option value="30" selected>30 por categoria</option><option value="50">50 por categoria</option><option value="100">100 por categoria</option><option value="250">250 por categoria (demora mais)</option></select>
+              <label class="secondary">Importar ZIP<input id="image-package" type="file" accept=".zip,application/zip" hidden></label>
+            </div>
+            <div id="vision-result" class="vision-result">Envie uma imagem para começar.</div>
+          </article>
+
+          <article class="vision-card">
+            <h2>Criar imagem offline</h2>
+            <p>Escreva uma cena com categorias ensinadas, como “cavalo na floresta”, ou escolha uma categoria. Na cena, experimente “à esquerda”, “em cima” ou “de ponta-cabeça”.</p>
+            <div class="generation-settings">
+              <label>Fonte da criação<select id="generation-source"><option value="">Somente descrição</option></select></label>
+              <label>Maior lado<select id="generation-size"><option value="384">384 pixels (mais rápido)</option><option value="512" selected>512 pixels</option><option value="768">768 pixels</option><option value="1024">1024 pixels</option><option value="1536">1536 pixels (demora mais)</option></select></label>
+              <label>Formato<select id="generation-format"><option value="square">Quadrado</option><option value="landscape">Paisagem 4:3</option><option value="portrait">Retrato 3:4</option></select></label>
+              <label>Detalhe da criação<select id="generation-quality"><option value="rapida">Rápido</option><option value="equilibrada" selected>Equilibrado</option><option value="detalhada">Detalhado (mais lento)</option></select></label>
+              <label>Variação<select id="generation-variation"><option value="fiel">Fiel aos exemplos</option><option value="equilibrado" selected>Equilibrada</option><option value="criativo">Mais livre</option></select></label>
+              <label>Código da imagem (opcional)<input id="generation-code" maxlength="64" placeholder="Vazio = nova variação"></label>
+            </div>
+            <label class="feedback-toggle"><input id="use-image-feedback" type="checkbox" checked> Usar minhas avaliações nas próximas criações (leva mais tempo)</label>
+            <textarea id="image-prompt" maxlength="300" placeholder="Ex.: versão noturna, desenho, pixelado, azul, floresta..."></textarea>
+            <div class="generation-actions"><button id="generate-image">Criar imagem</button><button id="repeat-image" class="secondary" disabled>Criar variação da última</button></div>
+            <div id="generation-info" class="generation-info">Selecione uma categoria para criar com o que a Laura aprendeu.</div>
+            <img id="generated-image" class="generated-image" alt="Imagem criada pela Laura" hidden>
+            <div id="rating-actions" class="generation-actions" hidden><button id="rate-good" class="secondary">👍 Ficou boa</button><button id="rate-bad" class="secondary">👎 Melhorar</button><button id="undo-rating" class="secondary" hidden>Desfazer avaliação</button></div>
+            <div id="rating-info" class="generation-info" aria-live="polite" hidden>Avalie esta imagem para orientar as próximas variações desta categoria.</div>
+            <a id="download-image" class="secondary download-link" download="laura-imagem.png" hidden>Baixar imagem</a>
+          </article>
+        </div>
+        <div class="section-heading visual-heading"><div><h2>Categorias aprendidas</h2><p>Para melhorar, ensine pelo menos três fotos diferentes de cada categoria.</p></div></div>
+        <div id="visual-accuracy" class="profile-card visual-stats"></div>
+        <div id="visual-categories" class="card-grid"></div>
+        <div id="visual-items-section" hidden>
+          <div class="section-heading visual-heading"><div><h2 id="visual-items-title">Exemplos</h2><p>Exclua somente imagens erradas, repetidas ou de baixa qualidade.</p></div><button class="secondary" id="close-visual-items">Fechar</button></div>
+          <div id="visual-items" class="visual-items"></div>
+        </div>
+      </section>
+      <section id="game" class="panel content-panel">
+        <div class="section-heading"><div><h2>Labirinto da Laura</h2><p>Ambiente básico da série 2, totalmente offline.</p></div></div>
+        <div class="game-layout">
+          <div id="game-board" class="game-board" role="grid" aria-label="Labirinto"></div>
+          <div class="game-controls">
+            <p id="game-status" aria-live="polite">Carregando partida...</p>
+            <p id="game-steps">Passos: 0</p>
+            <div class="game-pad">
+              <button data-move="up" aria-label="Cima">↑</button>
+              <button data-move="left" aria-label="Esquerda">←</button>
+              <button data-move="down" aria-label="Baixo">↓</button>
+              <button data-move="right" aria-label="Direita">→</button>
+            </div>
+            <button id="game-decide" class="secondary">Laura: próximo passo</button>
+            <button id="game-new" class="secondary">Nova partida</button>
+            <small>A Laura usa uma busca simples para achar o caminho. Ela ainda não aprende com recompensas nesta versão.</small>
+            <div id="game-history" class="game-history"></div>
+          </div>
+        </div>
+      </section>
+    </section>
+  </main>
+  <script src="/static/app.js"></script>
+  <script src="/static/game.js"></script>
+  <style>@media(max-width:700px){nav{grid-template-columns:repeat(7,1fr)}}.feedback{display:flex;gap:6px;margin-top:5px}.feedback button{border:1px solid #313b5d;border-radius:7px;background:#11162a;color:#9da8c8;cursor:pointer;padding:3px 8px}.feedback button:hover{color:#fff;border-color:#57e6ff}.model-meta{display:block;margin-top:5px!important;color:#6f7b9c!important}</style>
+</body>
+</html>
